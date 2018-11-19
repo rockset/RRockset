@@ -1,0 +1,13 @@
+Package: RRockset
+Title: R Package Client for REST API
+Version: 0.1.0
+Authors@R: person("Rockset", email = "api@rockset.com", role = c("aut", "cre"))
+Description: Rockset serverless search and analytics 'DBI' interface.
+Depends: R (>= 3.2.3)
+Encoding: UTF-8
+License: Apache License 2.0
+URL: https://github.com/rockset/RRockset
+LazyData: true
+Suggests: testthat
+Imports: DBI, jsonlite, httr, R6
+RoxygenNote: 6.0.1.9000

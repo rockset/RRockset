@@ -21,8 +21,7 @@ setClass('RocksetResult',
 #' @export
 setMethod('dbFetch', 'RocksetResult', function(res, n = -1) {
   if (length(n) != 1 || n < -1) stop("n must be non-negative or -1")
-  
-  res@cursor$content$results
+  as.data.frame(res@cursor$content$results)
 })
 
 #' @rdname RocksetResult-class

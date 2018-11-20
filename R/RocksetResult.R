@@ -1,27 +1,32 @@
-#' @include RocksetConnection.R Response.R
-NULL
+#' @include RocksetConnection.R Response.R RocksetCursor.R
 
 #' An S4 class to represent a Rockset Result
-#' @slot statement The SQL statement sent to Rockset
 #' @slot connection The connection object associated with the result
-#' @slot cursor An internal implementation detail for keeping track of
-#'  what stage a request is in
+#' @slot cursor Cursor for iterating over the results
 #' @keywords internal
 #' @export
 setClass('RocksetResult',
          contains='DBIResult',
          slots=c(
-           'statement'='character',
            'connection'='RocksetConnection',
-           'cursor'='ANY'
+           'cursor'='RocksetCursor'
          )
 )
+
+fetchAll <- function(res) {
+  res$cursor
+}
 
 #' @rdname RocksetResult-class
 #' @export
 setMethod('dbFetch', 'RocksetResult', function(res, n = -1) {
   if (length(n) != 1 || n < -1) stop("n must be non-negative or -1")
-  as.data.frame(res@cursor$content$results)
+
+  if (n == -1) {
+    return(res@cursor$fetchAll())
+  }
+  
+  return(res@cursor$fetchCount(n))
 })
 
 #' @rdname RocksetResult-class
@@ -30,6 +35,13 @@ setMethod('dbClearResult',
           c('RocksetResult'),
           function(res) {
             # clear results here
+            res@cursor$reset()
             return(TRUE)
           }
 )
+
+#' @rdname RocksetResult-class
+#' @export
+setMethod('dbHasCompleted', c('RocksetResult'), function(res) {
+  return(res@cursor$hasCompleted())
+})

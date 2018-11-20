@@ -18,7 +18,7 @@ sql <- "select _id, kind from _events limit 5"
 con <- dbConnect(RRockset::Rockset(),
                  apikey='<api-key>')
 
-# get all the documents using dbSendQuery
+# fetch the documents using dbSendQuery
 res <- dbSendQuery(con, sql)
 print(dbFetch(res))
 
@@ -27,7 +27,7 @@ res <- dbGetQuery(con, sql)
 print(res)
 ```
 
-Use parameters:
+Using parameters:
 ```
 library('DBI')
 sql <- "select _id, kind from _events where kind = :kind limit 5"
@@ -36,9 +36,22 @@ params <- list(param1)
 con <- dbConnect(RRockset::Rockset(),
                  apikey='<api-key>')
 
-# get all the documents
+# fetch the documents
 res <- dbSendQuery(con, sql, params)
 print(dbFetch(res))
+```
+
+Fetch one chunk at a time:
+```
+library('DBI')
+sql <- "select * from _events"
+con <- dbConnect(RRockset::Rockset(), 
+                 apikey='<api-key>')
+res <- dbSendQuery(con, sql)
+while(!dbHasCompleted(res)) {
+  # fetch 10 documents at a time
+  print(dbFetch(res, n = 10)) 
+}
 ```
 
 ## License

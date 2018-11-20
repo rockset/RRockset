@@ -1,12 +1,8 @@
 #' @include RocksetConnection.R ApiClient.R
 
 #' An S4 class to represent a Rockset Driver (and methods)
-#' It is used purely for dispatch and \code{dbUnloadDriver} is unnecessary
 #'
-#' @keywords internal
 #' @export
-#' @importFrom methods setClass setGeneric setMethod setRefClass
-#' @importFrom methods show getPackageName new
 #' @import DBI
 setClass('RocksetDriver',
          contains='DBIDriver'

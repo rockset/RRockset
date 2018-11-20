@@ -1,7 +1,5 @@
 #' @include QueryRequestSql.R QueryRequest.R QueriesApi.R RocksetResult.R
 
-NULL
-
 #' S4 implementation of \code{DBIConnection} for Rockset
 #'
 #' @keywords internal
@@ -45,7 +43,7 @@ setMethod('dbSendQuery', c('RocksetConnection', 'character'), function(conn, sta
 
 dbSend <- function(conn, statement, params = NULL) {
   statement <- enc2utf8(statement)
-  
+
   parameter <- list()
   if (!is.null(params)) {
     for (l in params) {
@@ -55,25 +53,14 @@ dbSend <- function(conn, statement, params = NULL) {
     }
   }
   
-  queryRequestSql <- QueryRequestSql$new(query=statement, parameters=parameter)
-  # construct query request
-  queryRequest <- QueryRequest$new(queryRequestSql)
-  
   query <- QueriesApi$new()
   query$initialize(apiClient=conn@apiclient)
   
-  resp <- query$query(body=queryRequest)
-  if (typeof(resp$content) == 'character' &&
-      (resp$content == 'API client error' ||
-       resp$content == 'API server error')) {
-    stop('Query failed, response: ', resp$response)
-  }
-  
-  rv <- new('RocksetResult',
-            statement=statement,
+  cursor <- RocksetCursor$new(query, statement, parameter)
+  rr <- new('RocksetResult',
             connection=conn,
-            cursor=resp)
-  return(rv)
+            cursor=cursor)
+  return(rr)
 }
 
 #' @rdname RocksetConnection-class

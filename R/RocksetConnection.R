@@ -1,4 +1,4 @@
-#' @include QueryRequestSql.R QueryRequest.R QueriesApi.R
+#' @include QueryRequestSql.R QueryRequest.R QueriesApi.R RocksetResult.R
 
 NULL
 
@@ -19,7 +19,8 @@ setMethod('show',
           'RocksetConnection',
           function(object) {
             cat(
-              '<RocksetConnection: ', object@apiclient, '>\n',
+              '<RocksetConnection: ', object@apiclient$basePath, '>\n',
+              'ApiKey: ', object@apiclient$apikey, '\n',
               sep=''
             )
           }
@@ -44,16 +45,27 @@ setMethod('dbSendQuery', c('RocksetConnection', 'character'), function(conn, sta
 
 dbSend <- function(conn, statement, params = NULL) {
   statement <- enc2utf8(statement)
-  queryRequestSql <- QueryRequestSql$new(query=statement)
   
+  parameter <- list()
+  if (!is.null(params)) {
+    for (l in params) {
+      queryParameter <- 
+        QueryParameter$new(name=l$name, type=l$type, value=l$value)
+      parameter <- append(parameter, queryParameter)
+    }
+  }
+  
+  queryRequestSql <- QueryRequestSql$new(query=statement, parameters=parameter)
   # construct query request
   queryRequest <- QueryRequest$new(queryRequestSql)
+  
   query <- QueriesApi$new()
   query$initialize(apiClient=conn@apiclient)
   
   resp <- query$query(body=queryRequest)
   if (typeof(resp$content) == 'character' &&
-      resp$content == 'API client error') {
+      (resp$content == 'API client error' ||
+       resp$content == 'API server error')) {
     stop('Query failed, response: ', resp$response)
   }
   
@@ -63,3 +75,11 @@ dbSend <- function(conn, statement, params = NULL) {
             cursor=resp)
   return(rv)
 }
+
+#' @rdname RocksetConnection-class
+#' @export
+setMethod('dbGetQuery', c('RocksetConnection', 'character'), function(conn, statement, params = NULL) {
+  res <- dbSendQuery(conn, statement, params)
+  on.exit(dbClearResult(res))
+  return(dbFetch(res))
+})

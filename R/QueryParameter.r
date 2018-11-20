@@ -65,9 +65,9 @@ QueryParameter <- R6::R6Class(
     toJSONString = function() {
        sprintf(
         '{
-           "name": %s,
-           "type": %s,
-           "value": %s
+           "name": "%s",
+           "type": "%s",
+           "value": "%s"
         }',
         self$`name`,
         self$`type`,

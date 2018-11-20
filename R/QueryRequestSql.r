@@ -25,8 +25,8 @@ QueryRequestSql <- R6::R6Class(
         stopifnot(is.character(`query`), length(`query`) == 1)
         self$`query` <- `query`
       }
-      if (!missing(`parameters`)) {
-        stopifnot(is.list(`parameters`), length(`parameters`) != 0)
+      if (!missing(`parameters`) && length(`parameters`) != 0) {
+        stopifnot(is.list(`parameters`))
         lapply(`parameters`, function(x) stopifnot(R6::is.R6(x)))
         self$`parameters` <- `parameters`
       }
@@ -56,11 +56,20 @@ QueryRequestSql <- R6::R6Class(
       }
     },
     toJSONString = function() {
+      params = ""
+      for (p in self$`parameters`) {
+        params = paste(p$toJSONString(), params, sep=",")
+      }
+      
+      params <- substr(params, 1, nchar(params) - 1)
+      
        sprintf(
         '{
-           "query": "%s"
+           "query": "%s",
+           "parameters": [%s]
         }',
-        self$`query`
+        self$`query`,
+        params
       )
     },
     fromJSONString = function(QueryRequestSqlJson) {

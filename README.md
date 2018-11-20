@@ -52,6 +52,9 @@ while(!dbHasCompleted(res)) {
   # fetch 10 documents at a time
   print(dbFetch(res, n = 10)) 
 }
+
+# clear the result
+dbClearResult(res)
 ```
 
 ## License

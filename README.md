@@ -13,7 +13,7 @@ RRockset is available on [github](https://github.com/rockset/RRockset).
 
 You can install the github version using:
 ```
-devtools::install_github('rockset/RRockset')
+devtools::install_github('rockset/RRockset@v0.1.0')
 ```
 
 ## Example

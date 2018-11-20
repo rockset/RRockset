@@ -31,7 +31,7 @@ Use parameters:
 ```
 library('DBI')
 sql <- "select _id, kind from _events where kind = :kind limit 5"
-param1 <- list(name = "kind", type = "string", value = "QUERY")
+param1 <- list(name = "kind", type = "string", value = "ORGANIZATION")
 params <- list(param1)
 con <- dbConnect(RRockset::Rockset(),
                  apikey='<api-key>')

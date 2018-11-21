@@ -3,14 +3,22 @@
 RRockset is a R DBI-based adapter for [Rockset](https://rockset.com/). RRockset supports only read operations.
 
 ## Installation
-You'll need the `devtools` package in order to install RRockset. RRockset is available on [github](https://github.com/rockset/RRockset).
+You'll need the `devtools` package in order to install RRockset.
+```
+install.packages('devtools')
+library('devtools')
+```
+
+RRockset is available on [github](https://github.com/rockset/RRockset).
 
 You can install the github version using:
 ```
-devtools::install_github('rockset/RRockset')
+devtools::install_github('rockset/RRockset@v0.1.0')
 ```
 
 ## Example
+You'll need an API Key to perform operations on Rockset. If you do not already have an account, please contact us at hello@rockset.com.
+
 
 ```
 library('DBI')

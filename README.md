@@ -17,6 +17,8 @@ devtools::install_github('rockset/RRockset@v0.1.0')
 ```
 
 ## Example
+You'll need an API Key to perform operations on Rockset. If you do not already have an account, please contact us at hello@rockset.com.
+
 
 ```
 library('DBI')

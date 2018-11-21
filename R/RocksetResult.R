@@ -1,9 +1,8 @@
 #' @include RocksetConnection.R Response.R RocksetCursor.R
 
-#' An S4 class to represent a Rockset Result
+#' Class to represent a Rockset Result
 #' @slot connection The connection object associated with the result
 #' @slot cursor Cursor for iterating over the results
-#' @keywords internal
 #' @export
 setClass('RocksetResult',
          contains='DBIResult',

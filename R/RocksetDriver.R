@@ -1,7 +1,5 @@
 #' @include RocksetConnection.R ApiClient.R
 
-#' An S4 class to represent a Rockset Driver (and methods)
-#'
 #' @export
 #' @import DBI
 setClass('RocksetDriver',
@@ -44,8 +42,6 @@ setMethod("dbGetInfo",
 #' \dontrun{
 #'   conn <- dbConnect(Rockset(), host = 'https://api.rs2.usw2.rockset.com',
 #'   apikey = 'PFUF....')
-#'   dbListTables(conn, '%_iris')
-#'   dbDisconnect(conn)
 #' }
 setMethod('dbConnect',
           'RocksetDriver',

@@ -44,7 +44,7 @@ ApiClient  <- R6::R6Class(
         headers <- httr::add_headers(.headers = c("Authorization"= paste("ApiKey ", self$apikey), 
                                                   'Content-Type' = 'application/json',
                                                   'User-Agent' = 'R-lang',
-                                                  'x-rockset-version' = '0.5.1'))
+                                                  'x-rockset-version' = '0.6.0'))
         if (method == "GET") {
             httr::GET(url, queryParams, headers, ...)
         }
